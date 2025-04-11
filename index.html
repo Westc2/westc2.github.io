@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NHL Bracket Submission</title>
+</head>
+<body>
+  <h2>NHL Playoff Bracket - Round 1</h2>
+
+  <form id="bracketForm">
+    <label>Name: <input type="text" name="name" required></label><br><br>
+    <label>Series: 
+      <select name="series">
+        <option>TOR vs BOS</option>
+        <option>COL vs WPG</option>
+        <!-- Add more matchups -->
+      </select>
+    </label><br><br>
+    <label>Winner:
+      <select name="winner">
+        <option>Toronto</option>
+        <option>Boston</option>
+        <option>Colorado</option>
+        <option>Winnipeg</option>
+      </select>
+    </label><br><br>
+    <label>Games:
+      <select name="games">
+        <option>4</option><option>5</option><option>6</option><option>7</option>
+      </select>
+    </label><br><br>
+    <label>X-Factor: <input type="text" name="xfactor" required></label><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    document.getElementById("bracketForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        name: formData.get("name"),
+        series: formData.get("series"),
+        winner: formData.get("winner"),
+        games: formData.get("games"),
+        xfactor: formData.get("xfactor")
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycby36Xg-GnCtNCy_JJB9uFbHBmglPvfFuhers4hiYf7UNzaX-Pnj59l5fURbc9X8IsxtSQ/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(text => {
+        document.getElementById("response").innerText = text;
+        this.reset();
+      });
+    });
+  </script>
+</body>
+</html>
