@@ -1,84 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NHL Playoff Bracket Challenge</title>
+  <title>NHL Playoff Bracket Challenge - Round 1</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const matchups = [
+        { id: 1, label: "Washington vs Montreal", teams: ["Washington", "Montreal"] },
+        { id: 2, label: "Toronto vs Ottawa", teams: ["Toronto", "Ottawa"] },
+        { id: 3, label: "Tampa Bay vs Florida", teams: ["Tampa Bay", "Florida"] },
+        { id: 4, label: "Carolina vs New Jersey", teams: ["Carolina", "New Jersey"] },
+        { id: 5, label: "Winnipeg vs St. Louis", teams: ["Winnipeg", "St. Louis"] },
+        { id: 6, label: "Vegas vs Minnesota", teams: ["Vegas", "Minnesota"] },
+        { id: 7, label: "Dallas vs Colorado", teams: ["Dallas", "Colorado"] },
+        { id: 8, label: "Los Angeles vs Edmonton", teams: ["Los Angeles", "Edmonton"] }
+      ];
+
+      const form = document.getElementById("playoffForm");
+
+      matchups.forEach((matchup, index) => {
+        const fieldset = document.createElement("fieldset");
+        fieldset.innerHTML = `<legend>Matchup ${index + 1}: ${matchup.label}</legend>`;
+
+        // Winner dropdown
+        const winnerLabel = document.createElement("label");
+        winnerLabel.textContent = "Pick Winner: ";
+        const winnerSelect = document.createElement("select");
+        winnerSelect.name = `winner${matchup.id}`;
+        matchup.teams.forEach(team => {
+          const option = document.createElement("option");
+          option.value = team;
+          option.text = team;
+          winnerSelect.appendChild(option);
+        });
+        winnerLabel.appendChild(winnerSelect);
+        fieldset.appendChild(winnerLabel);
+        fieldset.appendChild(document.createElement("br"));
+
+        // Games dropdown (4-7)
+        const gamesLabel = document.createElement("label");
+        gamesLabel.textContent = "Pick Number of Games: ";
+        const gamesSelect = document.createElement("select");
+        gamesSelect.name = `games${matchup.id}`;
+        for (let i = 4; i <= 7; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.text = i;
+          gamesSelect.appendChild(option);
+        }
+        gamesLabel.appendChild(gamesSelect);
+        fieldset.appendChild(gamesLabel);
+        fieldset.appendChild(document.createElement("br"));
+
+        // X-Factor player dropdown (populated by Apps Script)
+        const xfactorLabel = document.createElement("label");
+        xfactorLabel.textContent = "Pick X-Factor Player: ";
+        const xfactorSelect = document.createElement("select");
+        xfactorSelect.name = `xfactor${matchup.id}`;
+        xfactorSelect.id = `xfactor${matchup.id}`;
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.text = "Loading...";
+        xfactorSelect.appendChild(placeholder);
+        xfactorLabel.appendChild(xfactorSelect);
+        fieldset.appendChild(xfactorLabel);
+
+        form.insertBefore(fieldset, document.getElementById("submitButton"));
+      });
+
+      // Load X-Factor options from Google Sheet
+      fetch('https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec')
+        .then(response => response.json())
+        .then(data => {
+          matchups.forEach((matchup, index) => {
+            const select = document.getElementById(`xfactor${matchup.id}`);
+            select.innerHTML = "";
+            data.players.forEach(player => {
+              const option = document.createElement("option");
+              option.value = player;
+              option.text = player;
+              select.appendChild(option);
+            });
+          });
+        });
+    });
+  </script>
 </head>
 <body>
+  <h1>NHL Playoff Bracket Challenge - Round 1</h1>
+  <form id="playoffForm" method="POST" action="https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
 
-<h1>NHL Playoff Bracket Challenge</h1>
-
-<!-- Link to your web app homepage -->
-<a href="https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec" target="_blank">Go to Web App Home</a>
-
-<br><br>
-
-<!-- Select Series -->
-<form action="https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec" method="POST">
-    <label for="matchup">Select Series:</label>
-    <select id="matchup" name="matchup" onchange="updateWinners()">
-        <option value="">--Choose a Series--</option>
-        <option value="WSH|MTL">Washington vs Montreal</option>
-        <option value="TOR|OTT">Toronto vs Ottawa</option>
-        <option value="TBL|FLA">Tampa Bay vs Florida</option>
-	<option value="CAR|NJD">Carolina vs New Jersey</option>
-	<option value="WPG|STL">Winnipeg vs St. Louis</option>
-	<option value="VGK|MIN">Vegas vs Minnesota</option>
-	<option value="DAL|COL">Dallas vs Colorado</option>
-	<option value="LAK|EDM">Los Angeles vs Edmonton</option>
-        <!-- Add all matchups here in the same format -->
-    </select>
-
-    <br><br>
-
-    <label for="winner">Pick Winner:</label>
-    <select id="winner" name="winner">
-        <option value="">--Select Winner--</option>
-        <!-- This will be updated based on the series -->
-    </select>
-
-    <br><br>
-
-    <label for="games">Number of Games:</label>
-    <input type="number" id="games" name="games" min="1" max="7">
-
-    <br><br>
-
-    <label for="xFactor">Pick X-Factor Player:</label>
-    <select id="xFactor" name="xFactor">
-        <!-- Populate with players for each team in a matchup -->
-    </select>
-
-    <br><br>
-
-    <label for="xFactorGWG">X-Factor Game Winning Goal Scorer (optional):</label>
-    <input type="text" id="xFactorGWG" name="xFactorGWG">
-    
-    <br><br>
-    <button type="submit">Submit Picks</button>
-</form>
-
-<!-- Add the JavaScript -->
-<script>
-  function updateWinners() {
-    const matchup = document.getElementById("matchup").value;
-    const winnerDropdown = document.getElementById("winner");
-
-    // Clear existing options
-    winnerDropdown.innerHTML = '<option value="">--Select Winner--</option>';
-
-    if (matchup) {
-      const teams = matchup.split("|");
-      teams.forEach(team => {
-        const option = document.createElement("option");
-        option.value = team;
-        option.text = team;
-        winnerDropdown.appendChild(option);
-      });
-    }
-  }
-</script>
-
+    <button id="submitButton" type="submit">Submit Picks</button>
+  </form>
 </body>
 </html>
