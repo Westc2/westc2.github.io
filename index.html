@@ -68,7 +68,7 @@
       });
 
       // Load X-Factor options from Google Sheet
-      fetch('https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec')
+      fetch("https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec")
         .then(response => response.json())
         .then(data => {
           matchups.forEach((matchup, index) => {
