@@ -1,63 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NHL Bracket Submission</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHL Playoff Bracket Challenge</title>
 </head>
 <body>
-  <h2>NHL Playoff Bracket - Round 1</h2>
 
-  <form id="bracketForm">
-    <label>Name: <input type="text" name="name" required></label><br><br>
-    <label>Series: 
-      <select name="series">
-        <option>TOR vs BOS</option>
-        <option>COL vs WPG</option>
-        <!-- Add more matchups -->
-      </select>
-    </label><br><br>
-    <label>Winner:
-      <select name="winner">
-        <option>Toronto</option>
-        <option>Boston</option>
-        <option>Colorado</option>
-        <option>Winnipeg</option>
-      </select>
-    </label><br><br>
-    <label>Games:
-      <select name="games">
-        <option>4</option><option>5</option><option>6</option><option>7</option>
-      </select>
-    </label><br><br>
-    <label>X-Factor: <input type="text" name="xfactor" required></label><br><br>
+<h1>NHL Playoff Bracket Challenge</h1>
 
-    <button type="submit">Submit</button>
-  </form>
+<!-- Link to your web app homepage -->
+<a href="https://script.google.com/macros/s/AKfycby36Xg-GnCtNCy_JJB9uFbHBmglPvfFuhers4hiYf7UNzaX-Pnj59l5fURbc9X8IsxtSQ/exec" target="_blank">Go to Web App Home</a>
 
-  <p id="response"></p>
+<br><br>
 
-  <script>
-    document.getElementById("bracketForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+<!-- Select Series -->
+<form action="https://script.google.com/macros/s/AKfycby36Xg-GnCtNCy_JJB9uFbHBmglPvfFuhers4hiYf7UNzaX-Pnj59l5fURbc9X8IsxtSQ/exec" method="POST">
+    <label for="matchup">Select Series:</label>
+    <select id="matchup" name="matchup" onchange="updateWinners()">
+        <option value="">--Choose a Series--</option>
+        <option value="WSH|MTL">Washington vs Montreal</option>
+        <option value="TOR|OTT">Toronto vs Ottawa</option>
+        <option value="TBL|FLA">Tampa Bay vs Florida</option>
+	<option value="CAR|NJD">Carolina vs New Jersey</option>
+	<option value="WPG|STL">Winnipeg vs St. Louis</option>
+	<option value="VGK|MIN">Vegas vs Minnesota</option>
+	<option value="DAL|COL">Dallas vs Colorado</option>
+	<option value="LAK|EDM">Los Angeles vs Edmonton</option>
+        <!-- Add all matchups here in the same format -->
+    </select>
 
-      const formData = new FormData(this);
-      const data = {
-        name: formData.get("name"),
-        series: formData.get("series"),
-        winner: formData.get("winner"),
-        games: formData.get("games"),
-        xfactor: formData.get("xfactor")
-      };
+    <br><br>
 
-      fetch("https://script.google.com/macros/s/AKfycby36Xg-GnCtNCy_JJB9uFbHBmglPvfFuhers4hiYf7UNzaX-Pnj59l5fURbc9X8IsxtSQ/exec", {
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(text => {
-        document.getElementById("response").innerText = text;
-        this.reset();
+    <label for="winner">Pick Winner:</label>
+    <select id="winner" name="winner">
+        <option value="">--Select Winner--</option>
+        <!-- This will be updated based on the series -->
+    </select>
+
+    <br><br>
+
+    <label for="games">Number of Games:</label>
+    <input type="number" id="games" name="games" min="1" max="7">
+
+    <br><br>
+
+    <label for="xFactor">Pick X-Factor Player:</label>
+    <select id="xFactor" name="xFactor">
+        <!-- Populate with players for each team in a matchup -->
+    </select>
+
+    <br><br>
+
+    <label for="xFactorGWG">X-Factor Game Winning Goal Scorer (optional):</label>
+    <input type="text" id="xFactorGWG" name="xFactorGWG">
+    
+    <br><br>
+    <button type="submit">Submit Picks</button>
+</form>
+
+<!-- Add the JavaScript -->
+<script>
+  function updateWinners() {
+    const matchup = document.getElementById("matchup").value;
+    const winnerDropdown = document.getElementById("winner");
+
+    // Clear existing options
+    winnerDropdown.innerHTML = '<option value="">--Select Winner--</option>';
+
+    if (matchup) {
+      const teams = matchup.split("|");
+      teams.forEach(team => {
+        const option = document.createElement("option");
+        option.value = team;
+        option.text = team;
+        winnerDropdown.appendChild(option);
       });
-    });
-  </script>
+    }
+  }
+</script>
+
 </body>
 </html>
