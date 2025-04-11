@@ -73,7 +73,7 @@
         .then(data => {
           matchups.forEach((matchup, index) => {
             const select = document.getElementById(`xfactor${matchup.id}`);
-            select.innerHTML = "";
+            select.innerHTML = ""; // Clear the placeholder option
             data.players.forEach(player => {
               const option = document.createElement("option");
               option.value = player;
@@ -95,3 +95,4 @@
   </form>
 </body>
 </html>
+
