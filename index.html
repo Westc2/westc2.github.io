@@ -5,7 +5,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const matchups = [
-        { id: 1, label: "WSH|MON", teams: ["Washington", "Montreal"] },
+        { id: 1, label: "WSH|MTL", teams: ["Washington", "Montreal"] },
         { id: 2, label: "TOR|OTT", teams: ["Toronto", "Ottawa"] },
         { id: 3, label: "TBL|FLA", teams: ["Tampa Bay", "Florida"] },
         { id: 4, label: "CAR|NJD", teams: ["Carolina", "New Jersey"] },
@@ -19,7 +19,7 @@
 
       matchups.forEach((matchup, index) => {
         const fieldset = document.createElement("fieldset");
-        fieldset.innerHTML = `<legend>Matchup ${index + 1}: ${matchup.label}</legend>`;
+        fieldset.innerHTML = `<legend>Matchup ${matchup.id}: ${matchup.label}</legend>`;
 
         // Winner dropdown
         const winnerLabel = document.createElement("label");
@@ -51,7 +51,7 @@
         fieldset.appendChild(gamesLabel);
         fieldset.appendChild(document.createElement("br"));
 
-        // X-Factor player dropdown (populated by Apps Script)
+        // X-Factor dropdown
         const xfactorLabel = document.createElement("label");
         xfactorLabel.textContent = "Pick X-Factor Player: ";
         const xfactorSelect = document.createElement("select");
@@ -67,13 +67,13 @@
         form.insertBefore(fieldset, document.getElementById("submitButton"));
       });
 
-      // Load X-Factor options from Google Sheet
+      // Fetch X-Factor players from the Apps Script web app
       fetch("https://script.google.com/macros/s/AKfycbwyDvydDusS0SMRWFdXhuMJk2rIs0V9v2n3OhOdpsYhEitMnR2kB7LKeMC5yrN6yJK78Q/exec")
         .then(response => response.json())
         .then(data => {
-          matchups.forEach((matchup, index) => {
+          matchups.forEach((matchup) => {
             const select = document.getElementById(`xfactor${matchup.id}`);
-            select.innerHTML = ""; // Clear the placeholder option
+            select.innerHTML = "";
             data.players.forEach(player => {
               const option = document.createElement("option");
               option.value = player;
@@ -95,4 +95,3 @@
   </form>
 </body>
 </html>
-
