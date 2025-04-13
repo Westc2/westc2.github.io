@@ -25,7 +25,7 @@
         const winnerLabel = document.createElement("label");
         winnerLabel.textContent = "Pick Winner: ";
         const winnerSelect = document.createElement("select");
-        winnerSelect.name = `winner${matchup.id}`;
+        winnerSelect.name = `winner${matchup.id}`;  // Correct name attribute here
         matchup.teams.forEach(team => {
           const option = document.createElement("option");
           option.value = team;
@@ -40,7 +40,7 @@
         const gamesLabel = document.createElement("label");
         gamesLabel.textContent = "Pick Number of Games: ";
         const gamesSelect = document.createElement("select");
-        gamesSelect.name = `games${matchup.id}`;
+        gamesSelect.name = `games${matchup.id}`;  // Correct name attribute here
         for (let i = 4; i <= 7; i++) {
           const option = document.createElement("option");
           option.value = i;
@@ -55,7 +55,7 @@
         const xfactorLabel = document.createElement("label");
         xfactorLabel.textContent = "Pick X-Factor Player: ";
         const xfactorSelect = document.createElement("select");
-        xfactorSelect.name = `xfactor${matchup.id}`;
+        xfactorSelect.name = `xfactor${matchup.id}`;  // Correct name attribute here
         xfactorSelect.id = `xfactor${matchup.id}`;
         const placeholder = document.createElement("option");
         placeholder.value = "";
@@ -95,5 +95,6 @@
   </form>
 </body>
 </html>
+
 
 
